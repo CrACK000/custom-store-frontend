@@ -1,0 +1,194 @@
+[
+  {
+    "_id": "9dd5cc34-12d2-4b73-3685c2d6197d",
+    "type": "Subscription",
+    "status": "Refunded",
+    "products": [
+      {
+        "data": {
+          "_id": "2s3d",
+          "name": "Terra Wooden Desk",
+          "status": "Active",
+          "stocks": [
+            {
+              "sku": "asd",
+              "stock": 10,
+              "price": 92.49,
+              "size": "xl"
+            },
+            {
+              "sku": "asd",
+              "stock": 10,
+              "price": 99.99,
+              "size": "l"
+            },
+            {
+              "sku": "asd",
+              "stock": 10,
+              "price": 45,
+              "size": "m"
+            },
+            {
+              "sku": "asd",
+              "stock": 10,
+              "price": 32,
+              "size": "s"
+            }
+          ],
+          "gallery": {
+            "data": [
+              {
+                "image": "none"
+              },
+              {
+                "image": "placeholder-light.png"
+              }
+            ],
+            "main": 1
+          },
+          "created_at": "2023-10-18 03:21 PM"
+        },
+        "sku": "SKU5678",
+        "name": "Midnight Black Phone Case",
+        "quantity": 2,
+        "price": 129.63,
+        "size": "m"
+      },
+      {
+        "data": {
+          "_id": "2s3d",
+          "name": "Terra Wooden Desk",
+          "status": "Active",
+          "stocks": [
+            {
+              "sku": "asd",
+              "stock": 10,
+              "price": 92.49,
+              "size": "xl"
+            },
+            {
+              "sku": "asd",
+              "stock": 10,
+              "price": 99.99,
+              "size": "l"
+            },
+            {
+              "sku": "asd",
+              "stock": 10,
+              "price": 45,
+              "size": "m"
+            },
+            {
+              "sku": "asd",
+              "stock": 10,
+              "price": 32,
+              "size": "s"
+            }
+          ],
+          "gallery": {
+            "data": [
+              {
+                "image": "none"
+              },
+              {
+                "image": "placeholder-light.png"
+              }
+            ],
+            "main": 1
+          },
+          "created_at": "2023-10-18 03:21 PM"
+        },
+        "sku": "SKU3456",
+        "name": "Cozy Plaid Blanket",
+        "quantity": 6,
+        "price": 208.9,
+        "size": "s"
+      },
+      {
+        "data": {
+          "_id": "2s3d",
+          "name": "Terra Wooden Desk",
+          "status": "Active",
+          "stocks": [
+            {
+              "sku": "asd",
+              "stock": 10,
+              "price": 92.49,
+              "size": "xl"
+            },
+            {
+              "sku": "asd",
+              "stock": 10,
+              "price": 99.99,
+              "size": "l"
+            },
+            {
+              "sku": "asd",
+              "stock": 10,
+              "price": 45,
+              "size": "m"
+            },
+            {
+              "sku": "asd",
+              "stock": 10,
+              "price": 32,
+              "size": "s"
+            }
+          ],
+          "gallery": {
+            "data": [
+              {
+                "image": "none"
+              },
+              {
+                "image": "placeholder-light.png"
+              }
+            ],
+            "main": 1
+          },
+          "created_at": "2023-10-18 03:21 PM"
+        },
+        "sku": "SKU7890",
+        "name": "Vintage Leather Journal",
+        "quantity": 3,
+        "price": 294.67,
+        "size": "l"
+      }
+    ],
+    "billing_data": null,
+    "shipping_data": {
+      "customer": {
+        "name": "Anna-diana",
+        "surname": "Mathews",
+        "email": "bmactague0@shareasale.com",
+        "phone": "334-195-6039"
+      },
+      "address": "97425 Blue Bill Park Park",
+      "city": "Montgomery",
+      "state": "Alabama",
+      "zip": "36109"
+    },
+    "shipping_price": 9.72,
+    "payment_data": {
+      "type": "Paypal",
+      "status": "paid",
+      "date": "2024-05-05T05:49:45Z"
+    },
+    "seller": {
+      "_id": "789ghi",
+      "name": "Briana",
+      "surname": "Davidwitz",
+      "email": "bmactague0@blogs.com",
+      "nickname": "CoolSeller123"
+    },
+    "customer": {
+      "_id": "CUST5678",
+      "name": "Broddie",
+      "surname": "MacTague",
+      "email": "bmactague0@state.tx.us",
+      "nickname": "Bubbles"
+    },
+    "updated_at": "2024-02-08T07:02:48Z",
+    "created_at": "2024-05-05T05:49:45Z"
+  }
+]
