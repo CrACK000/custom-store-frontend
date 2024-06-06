@@ -88,7 +88,7 @@ function SideBar() {
               <NavLink
                 to="/analytics"
                 className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8 ${
-                    useMatch("/analytics") ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+                    useMatch("/analytics/*") ? "bg-accent text-accent-foreground" : "text-muted-foreground"
                   }`
                 }
               >

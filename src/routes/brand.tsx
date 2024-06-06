@@ -300,7 +300,7 @@ function Brand() {
                                   <FormItem className="md:col-span-2">
                                     <FormLabel>Description</FormLabel>
                                     <FormControl>
-                                      <Textarea rows={10} {...field} />
+                                      <Textarea rows={7} {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                   </FormItem>
@@ -308,7 +308,7 @@ function Brand() {
                               />
                             </div>
                             <DrawerFooter>
-                              <div className="flex justify-end">
+                              <div className="flex justify-end gap-2">
                                 <DrawerClose asChild>
                                   <Button type="button" variant="outline">Cancel</Button>
                                 </DrawerClose>
@@ -476,8 +476,10 @@ function Brand() {
                       <p className="text-sm font-medium leading-none">
                         {user.name} {user.surname}
                       </p>
-                      <p className="text-sm text-muted-foreground">
-                        {user.email}
+                      <p className="text-sm text-muted-foreground truncate">
+                        <a href={`mailto:${user.email}`} className="hover:underline">
+                          {user.email}
+                        </a>
                       </p>
                     </div>
                     <div className="ml-auto">

@@ -167,16 +167,16 @@ const OrderActions = () => {
   }
 
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 sm:px-6 sm:py-0 mx-auto max-w-7xl">
+    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} onChange={() => {form.watch()}} className="mx-auto grid max-w-5xl flex-1 auto-rows-max gap-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} onChange={() => {form.watch()}} className="mx-auto grid w-full max-w-5xl flex-1 auto-rows-max gap-4">
           <div className="flex items-center gap-4">
-            <Button type="button" variant="outline" size="icon" className="h-7 w-7" onClick={() => navigate("/orders")}>
+            <Button type="button" variant="outline" size="icon" className="h-7 w-7" onClick={() => navigate(-1)}>
               <ChevronLeft className="h-4 w-4"/>
               <span className="sr-only">Back</span>
             </Button>
-            <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-              {isEditMode ? `Editing Order: ${order?._id}` : "Create Order"}
+            <h1 className="w-full md:text-xl font-semibold tracking-tight truncate">
+              {isEditMode ? `Edit: ${order?._id}` : "Create Order"}
             </h1>
             <div className="hidden items-center gap-2 md:ml-auto md:flex">
               <Button type="button" variant="outline" size="sm" onClick={() => navigate("/orders")}>
@@ -188,8 +188,8 @@ const OrderActions = () => {
               </Button>
             </div>
           </div>
-          <div className="grid gap-4 lg:grid-cols-3 lg:gap-8">
-            <div className="grid auto-rows-max items-start gap-4 lg:gap-8 lg:col-span-2">
+          <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
+            <div className="grid grid-cols-1 auto-rows-max gap-4 lg:gap-8 lg:col-span-2">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-xl">Shipping Information</CardTitle>
@@ -445,10 +445,10 @@ const OrderActions = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Name</TableHead>
-                        <TableHead className="w-16 md:w-24">Quantity</TableHead>
-                        <TableHead className="w-16 md:w-24">Size</TableHead>
-                        <TableHead colSpan={2}>Price</TableHead>
+                        <TableHead className="text-xs uppercase font-medium text-muted-foreground">Name</TableHead>
+                        <TableHead className="md:w-24 text-xs uppercase font-medium text-muted-foreground">Quantity</TableHead>
+                        <TableHead className="md:w-24 text-xs uppercase font-medium text-muted-foreground">Size</TableHead>
+                        <TableHead className="text-xs uppercase font-medium text-muted-foreground" colSpan={2}>Price</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -465,7 +465,7 @@ const OrderActions = () => {
                                     className="hidden xl:block aspect-square rounded-md object-cover"
                                     alt="name"
                                   />
-                                  <div className="md:line-clamp-2">
+                                  <div className="truncate">
                                     {item.name}
                                   </div>
                                 </div>

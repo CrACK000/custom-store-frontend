@@ -5,7 +5,6 @@ import {
   ResponsiveContainer,
   Tooltip
 } from "recharts";
-import React from "react";
 import {Button} from "@/components/ui/button";
 import {Link} from "react-router-dom";
 
@@ -124,22 +123,22 @@ const data = [
   },
 ]
 
-function OrdersCard() {
+const DashboardOrdersCard = () => {
 
   return (
     <Card>
-      <CardHeader>
-        <div className="flex justify-between">
-          <div>
-            <CardTitle>Orders</CardTitle>
-            <CardDescription>
-              This month compared to last.
-            </CardDescription>
-          </div>
-          <Link to="/">
-            <Button variant="outline" size="sm">View more</Button>
-          </Link>
+      <CardHeader className="flex flex-row items-start justify-between">
+        <div className="space-y-2">
+          <CardTitle>Orders</CardTitle>
+          <CardDescription>
+            +20.1% from last month
+          </CardDescription>
         </div>
+        <Button variant="outline" size="sm" className="text-xs" asChild>
+          <Link to="/analytics/orders">
+            View More
+          </Link>
+        </Button>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={175}>
@@ -154,40 +153,6 @@ function OrdersCard() {
                 <stop offset="95%" stopColor={`hsl(var(--primary))`} stopOpacity={0}/>
               </linearGradient>
             </defs>
-            <Tooltip
-              content={({ active, payload }) => {
-                if (active && payload && payload.length) {
-                  return (
-                    <div className="rounded-lg border bg-background p-2 shadow-sm">
-                      <div className={`grid gap-2 ${payload[1] && "grid-cols-2"}`}>
-                        <div className="flex flex-col">
-                            <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              Last month
-                            </span>
-                          <span className="font-bold text-muted-foreground">
-                              {payload[0].value}
-                            </span>
-                        </div>
-                        {
-                          payload[1] ? (
-                            <div className="flex flex-col">
-                              <span className="text-[0.70rem] uppercase text-muted-foreground">
-                                This month
-                              </span>
-                              <span className="font-bold">
-                                {payload[1].value}
-                              </span>
-                            </div>
-                          ) : ""
-                        }
-                      </div>
-                    </div>
-                  )
-                }
-
-                return null
-              }}
-            />
             <Area type="monotone" dataKey="this" stroke={`hsl(var(--primary))`} strokeWidth={3} fillOpacity={1}
                   fill="url(#colorThis)"/>
             <Area type="monotone" dataKey="last" stroke={`hsl(var(--primary))`} strokeWidth={3} opacity={0.15}
@@ -199,4 +164,4 @@ function OrdersCard() {
   )
 }
 
-export default OrdersCard
+export default DashboardOrdersCard

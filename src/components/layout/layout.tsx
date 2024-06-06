@@ -1,5 +1,5 @@
-import Sidebar from "@/components/app/side-bar";
-import Header from "@/components/app/header";
+import Sidebar from "@/components/layout/side-bar";
+import Header from "@/components/layout/header";
 import React from "react";
 import {Outlet} from "react-router-dom";
 

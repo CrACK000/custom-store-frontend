@@ -1,7 +1,7 @@
 import React from "react"
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 
-import Layout from "@/components/app/layout";
+import Layout from "@/components/layout/layout";
 import Orders from "@/routes/orders";
 import Dashboard from "@/routes/dashboard";
 import Products from "@/routes/products";
@@ -15,6 +15,7 @@ import Analytics from "@/routes/analytics";
 import Brand from "@/routes/brand";
 import ProductActions from "@/routes/product-actions";
 import OrderActions from "@/routes/order-actions";
+import AnalyticsProduct from "@/routes/analytics-product";
 
 function App() {
   return (
@@ -23,7 +24,12 @@ function App() {
         <Route path="/login" element={<LoginForm/>} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
-          <Route path="analytics" element={<Analytics />} />
+          <Route path="analytics">
+            <Route index element={<Analytics />} />
+            <Route path=":stage" element={<Analytics />} />
+            <Route path="product" element={<Navigate to="/analytics"/>} />
+            <Route path="product/:productId" element={<AnalyticsProduct />} />
+          </Route>
           <Route path="brand" element={<Brand />} />
           <Route path="orders">
             <Route index element={<Orders />}/>

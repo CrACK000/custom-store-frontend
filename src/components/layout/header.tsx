@@ -11,10 +11,10 @@ import {
 } from "lucide-react"
 import React from "react"
 import {NavLink, useMatch} from "react-router-dom";
-import BreadcrumbPanel from "@/components/app/breadcrumb";
-import SearchBox from "@/components/app/search-box";
-import UserAvatar from "@/components/app/user-avatar";
-import ThemeButton from "@/components/app/theme-button";
+import BreadcrumbPanel from "@/components/layout/breadcrumb";
+import SearchBox from "@/components/layout/search-box";
+import UserAvatar from "@/components/layout/user-avatar";
+import ThemeButton from "@/components/layout/theme-button";
 
 function Header(){
 
@@ -80,7 +80,7 @@ function Header(){
             <NavLink
               to="/analytics"
               className={`flex items-center gap-4 px-2.5 ${
-                  useMatch("/analytics") ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  useMatch("/analytics/*") ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                 }
               `}
             >

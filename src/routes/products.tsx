@@ -34,7 +34,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Input} from "@/components/ui/input";
 import React, {useState} from "react";
 import {z} from "zod";
@@ -79,6 +79,7 @@ const stages: { [key: string]: { title: string; desc: string; empty: string } } 
 
 function Products() {
 
+  const navigate = useNavigate()
   const [localProducts, setLocalProducts] = useState(products)
   const fuseOptions = { keys: ['name'], includeScore: true };
   const [searchInput, setSearchInput] = useState('');
@@ -227,10 +228,19 @@ function Products() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <Link to={`/products/edit/${product._id}`}>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem onClick={() => onOpenDelete(product)}>
+              <DropdownMenuItem
+                onClick={() => navigate(`edit/${product._id}`)}
+              >
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => navigate(`/analytics/product/${product._id}`)}
+              >
+                Stats
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => onOpenDelete(product)}
+              >
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>

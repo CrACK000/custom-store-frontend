@@ -1,6 +1,5 @@
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Bar, BarChart, ResponsiveContainer, XAxis, YAxis} from "recharts";
-import React from "react";
 import {Button} from "@/components/ui/button";
 import {Link} from "react-router-dom";
 
@@ -47,31 +46,34 @@ const data = [
   },
   {
     name: "Nov",
-    total: Math.floor(Math.random() * 5000) + 1000,
+    total: 0,
   },
   {
     name: "Dec",
-    total: Math.floor(Math.random() * 5000) + 1000,
+    total: 0,
   },
 ]
 
-function TotalEarningsCard() {
+const DashboardTotalEarningsCard = () => {
+
   return (
     <Card>
       <CardHeader>
         <div className="flex justify-between">
           <div>
-            <CardTitle>Total Earnings</CardTitle>
+            <CardTitle className="mb-1">Total Earnings</CardTitle>
             <CardDescription>
               Total earnings for this year.
             </CardDescription>
           </div>
-          <Link to="/analytics">
-            <Button size="sm">View More</Button>
-          </Link>
+          <Button size="sm" className="font-medium text-xs" asChild>
+            <Link to="/analytics/earnings">
+              View More
+            </Link>
+          </Button>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="ps-0">
         <ResponsiveContainer width="100%" height={175}>
           <BarChart data={data}>
             <XAxis
@@ -83,7 +85,7 @@ function TotalEarningsCard() {
             />
             <YAxis
               stroke="#888888"
-              fontSize={12}
+              fontSize={10}
               tickLine={false}
               axisLine={false}
               tickFormatter={(value) => `$${value}`}
@@ -101,4 +103,4 @@ function TotalEarningsCard() {
   )
 }
 
-export default TotalEarningsCard
+export default DashboardTotalEarningsCard

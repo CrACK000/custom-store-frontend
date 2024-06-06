@@ -106,7 +106,6 @@ function ProductActions() {
   // vars
   const [files, setFiles] = useState<Gallery[]>(product?.gallery?.data ?? [])
   const [mainFile, setMainFile] = useState<number | undefined>(product?.gallery?.main ?? 0)
-  const [leaveAlert, useLeaveAlert] = useState<boolean>(false)
   const [submitAction, setSubmitAction] = useState<TypesAction>(isEditMode ? "save" : "add");
   const [triggerSubmit, setTriggerSubmit] = useState(false);
   const [isDirty, setIsDirty] = useState(false)
@@ -209,7 +208,6 @@ function ProductActions() {
           navigate("/products")
         }
         toast(response.data.message)
-        useLeaveAlert(false)
       })
       .catch(error => {
         toast({
@@ -225,28 +223,20 @@ function ProductActions() {
       })
   }
 
-  // leave page
-  const CancelAlert = () => {
-    if (isDirty || (isEditMode ? files.length !== product?.gallery?.data.length : files.length > 0)) {
-      return useLeaveAlert(true)
-    }
-    navigate("/products");
-  }
-
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} onChange={() => {form.watch()}} className="mx-auto grid max-w-5xl flex-1 auto-rows-max gap-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} onChange={() => {form.watch()}} className="mx-auto grid w-full max-w-5xl flex-1 auto-rows-max gap-4">
           <div className="flex items-center gap-4">
-            <Button type="button" variant="outline" size="icon" className="h-7 w-7" onClick={CancelAlert}>
+            <Button type="button" variant="outline" size="icon" className="h-7 w-7" onClick={() => navigate(-1)}>
               <ChevronLeft className="h-4 w-4"/>
               <span className="sr-only">Back</span>
             </Button>
-            <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
+            <h1 className="w-full md:text-xl font-semibold tracking-tight truncate">
               {isEditMode ? product.name : "Add Product"}
             </h1>
             <div className="hidden items-center gap-2 md:ml-auto md:flex">
-              <Button type="button" onClick={CancelAlert} variant="outline" size="sm">
+              <Button type="button" variant="outline" size="sm" onClick={() => navigate("/products")}>
                 {isEditMode ? "Discard" : "Cancel"}
               </Button>
               <Button size="sm" type="submit" disabled={!isDirty}>
@@ -256,7 +246,7 @@ function ProductActions() {
             </div>
           </div>
           <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
-            <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
+            <div className="grid auto-rows-max items-start gap-4 lg:gap-8 lg:col-span-2">
               <Card>
                 <CardHeader>
                   <CardTitle>Product Details</CardTitle>
@@ -583,7 +573,7 @@ function ProductActions() {
             </div>
           </div>
           <div className="flex items-center justify-center gap-2 md:hidden">
-            <Button variant="outline" size="sm" onClick={CancelAlert}>
+            <Button variant="outline" size="sm" onClick={() => navigate("/products")}>
               {isEditMode ? "Discard" : "Cancel"}
             </Button>
             <Button size="sm" type="submit" disabled={!isDirty}>
@@ -591,50 +581,6 @@ function ProductActions() {
               {isEditMode ? "Save Changes" : "Add Product"}
             </Button>
           </div>
-          <AlertDialog open={leaveAlert}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Do you really want to leave?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  If you leave this page now, all unsaved changes will be lost. Are you sure you want to proceed?
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                {
-                  isEditMode ? (
-                    <Button
-                      type="submit"
-                      className="col-span-2"
-                      variant="link"
-                      onClick={() => {
-                        setSubmitAction("save");
-                        setTriggerSubmit(true);
-                      }}
-                    >
-                      {!loading || <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      Save
-                    </Button>
-                  ) : (
-                    <Button
-                      type="submit"
-                      className="col-span-2"
-                      variant="link"
-                      onClick={() => {
-                        setSubmitAction("save-draft");
-                        form.setValue("status", "Draft");
-                        setTriggerSubmit(true);
-                      }}
-                    >
-                      {!loading || <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      Save as draft
-                    </Button>
-                  )
-                }
-                <AlertDialogCancel type="button" onClick={() => useLeaveAlert(false)}>Cancel</AlertDialogCancel>
-                <AlertDialogAction type="button" onClick={() => navigate("/products")}>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
         </form>
       </Form>
     </main>
