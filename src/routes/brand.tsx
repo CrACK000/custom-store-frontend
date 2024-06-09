@@ -4,19 +4,22 @@ import {Button} from "@/components/ui/button";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {Input} from "@/components/ui/input";
 import {Separator} from "@/components/ui/separator";
-import {AtSign, Copy, LineChart, Loader2, Minus, Package, Plus, Search, Settings, Users} from "lucide-react";
+import {
+  AlertCircle,
+  AtSign,
+  CircleAlert,
+  Copy,
+  LineChart,
+  Loader2,
+  Minus,
+  Package,
+  Plus,
+  Search,
+  Settings,
+  Users
+} from "lucide-react";
 import {Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip as RechartTooltip} from "recharts"
 import * as React from "react"
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 import {useState} from "react";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
@@ -25,24 +28,21 @@ import {
   AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import Fuse from "fuse.js";
 import {copyLink} from "@/lib/copylink";
-import {Label} from "@/components/ui/label";
-import {Textarea} from "@/components/ui/textarea";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {useForm} from "react-hook-form";
-import {z} from "zod";
 import {toast} from "@/components/ui/use-toast";
-import {useUsers} from "@/hooks/use-users";
-import {useBrand} from "@/hooks/use-brand";
+import {GET_SUBSCRIPTIONS_USERS} from "@/hooks/use-users";
+import {GET_BRAND} from "@/hooks/use-brand";
 import {getInitials} from "@/lib/utils";
-import axios from "axios";
-import {ToastAction} from "@/components/ui/toast";
+import {useQuery} from "@apollo/client";
+import {Skeleton} from "@/components/ui/skeleton";
+import BrandSettings from "@/components/global/brand-settings";
+import {useLoaderData} from "react-router-dom";
+import client from "@/hooks/apollo-client";
+import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 
-const data = [
+const chartData = [
   {
     value: Math.floor(Math.random() * 500),
   },
@@ -135,42 +135,47 @@ const data = [
   },
 ]
 
-const FormSchema = z.object({
-  title: z.string()
-    .min(2, {message: "The title must have at least 2 characters."})
-    .max(50, {message: "The maximum number of characters is 50."}),
-  logo: z.string().url(),
-  link: z.string(),
-  description: z.string().max(600, {
-    message: "The maximum number of characters is 600."
-  })
-})
+export function brandLoader() {
+  return async () => {
+    try {
+      const brand = await client.query({
+        query: GET_BRAND,
+        variables: { _id: "1", user_id: "user1" }
+      });
+      const subs = await client.query({
+        query: GET_SUBSCRIPTIONS_USERS,
+        variables: { key: "456def" }
+      });
+      return { brand, subs };
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: String(error),
+      });
+      return {
+        brand: null,
+        subs: { error: { message: String(error) } }
+      };
+    }
+  };
+}
 
 function Brand() {
 
-  const subscribers = useUsers();
-  const brand = useBrand();
+  const data: any = useLoaderData();
 
+  const users = data.subs;
+  const brand = data.brand;
+  
   const fuseOptions = { keys: ['name', 'surname', 'email'], includeScore: true };
 
   const [metricData, setMetricData] = useState(30)
-  const convertData = data.slice(0, metricData)
+  const convertData = chartData.slice(0, metricData)
 
   const [unSubDialog, setUnSubDialog] = useState(false)
   const [unSubData, setUnSubData] = useState<User | null>(null)
   const [searchInput, setSearchInput] = useState('');
-  const [loading, useLoading] = useState(false)
-
-  const formValues = {
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      title: brand.title ?? "Undefined",
-      logo: brand.logo ?? "",
-      link: brand.link ?? "",
-      description: brand.description ?? "",
-    },
-  }
-  const form = useForm<z.infer<typeof FormSchema>>(formValues);
 
   const handleSearch = (value: string) => {
     setSearchInput(value);
@@ -189,154 +194,74 @@ function Brand() {
     setUnSubData(data)
   }
 
-  const onEditBrandData = (values: z.infer<typeof FormSchema>) => {
-
-    useLoading(true)
-
-    const api = ""
-    const data = values
-    const options = { withCredentials: true }
-
-    axios.post(api, data, options)
-      .then(response => {
-        toast(response.data.message)
-      })
-      .catch(error => {
-        toast({
-          variant: "destructive",
-          title: "Server Error",
-          description: String(error),
-          action: <ToastAction altText="Try again" onClick={() => form.handleSubmit(onEditBrandData)()}>Try again</ToastAction>,
-          duration: 5000,
-        })
-      })
-      .finally(() => {
-        useLoading(false)
-      })
-
-  }
-
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-6">
+      {
+        (users && users.error) && (
+          <div className="col-span-full">
+            <Alert variant="destructive" className="bg-card">
+              <AlertCircle className="h-4 w-4"/>
+              <AlertTitle>{users.error.name ?? "Error"}</AlertTitle>
+              <AlertDescription>
+                {users.error.message}
+              </AlertDescription>
+            </Alert>
+          </div>
+        )
+      }
       <div className="grid gap-4 md:gap-8 col-span-3 xl:col-span-4">
         <Card>
-          <div className="relative rounded-t-lg h-44 bg-center bg-cover bg-[url(/public/placeholder-light.png)] dark:bg-[url(/public/placeholder-dark.png)]">
-            <CardContent className="absolute bottom-0 w-full">
-              <div className="flex items-center gap-x-4 md:gap-x-6">
-                <Avatar className="w-10 h-10 md:w-14 md:h-14">
-                  <AvatarImage src={brand.logo} alt={brand.title}/>
-                  <AvatarFallback>{getInitials(brand.title)}</AvatarFallback>
-                </Avatar>
-                <div className="text-2xl md:text-3xl font-bold">
-                  Different studio
+          {
+            (brand && brand.data.brand) ? (
+              <>
+                <div
+                  className={`relative h-44 ${(brand.data.brand && brand.data.brand.description) ? "rounded-t-lg" : "rounded-lg"} bg-center bg-cover bg-[url(/public/placeholder-light.png)] dark:bg-[url(/public/placeholder-dark.png)]`}>
+                  <CardContent className="absolute bottom-0 w-full">
+                    <div className="flex items-center gap-x-4 md:gap-x-6">
+                      {(brand.loading && brand.error) ? (
+                        <Skeleton className="w-10 h-10 md:w-14 md:h-14 rounded-full" />
+                      ) : (
+                        <Avatar className="w-10 h-10 md:w-14 md:h-14">
+                          {brand.data.brand && (
+                            <AvatarImage src={brand.data.brand.logo} alt={brand.data.brand.title}/>
+                          )}
+                          <AvatarFallback>{getInitials(brand.data.brand ? brand.data.brand.title : "Custom Hood")}</AvatarFallback>
+                        </Avatar>
+                      )}
+                      <div className="text-2xl md:text-3xl font-bold">
+                        {
+                          brand.loading && brand.error ? (
+                              <Skeleton className="w-32 md:w-56 max-w-full h-4" />
+                            ) :
+                            brand.data.brand && brand.data.brand.title
+                        }
+                      </div>
+                      <div className="ms-auto self-end">
+                        <BrandSettings brandData={brand.data.brand}/>
+                      </div>
+                    </div>
+                  </CardContent>
                 </div>
-                <div className="ms-auto self-end">
-                  <Drawer>
-                    <DrawerTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <Settings className="w-5 h-5"/>
-                      </Button>
-                    </DrawerTrigger>
-                    <DrawerContent>
-                      <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onEditBrandData)} onChange={() => {form.watch()}}>
-                          <div className="mx-auto w-full max-w-3xl">
-                            <DrawerHeader>
-                              <DrawerTitle>Brand Information</DrawerTitle>
-                            </DrawerHeader>
-                            <div className="p-4 grid md:grid-cols-2 gap-6">
-                              <FormField
-                                control={form.control}
-                                name="title"
-                                render={({field}) => (
-                                  <FormItem>
-                                    <FormLabel>Title</FormLabel>
-                                    <FormControl>
-                                      <Input {...field} />
-                                    </FormControl>
-                                    <FormMessage/>
-                                  </FormItem>
-                                )}
-                              />
-                              <FormField
-                                control={form.control}
-                                name="logo"
-                                render={({field}) => (
-                                  <FormItem>
-                                    <FormLabel>Logo URL</FormLabel>
-                                    <div className="flex gap-x-4">
-                                      <FormControl>
-                                        <Input placeholder="https://" {...field} />
-                                      </FormControl>
-                                      <Avatar>
-                                        <AvatarImage src={brand.logo} alt={brand.title}/>
-                                        <AvatarFallback>{getInitials(brand.title)}</AvatarFallback>
-                                      </Avatar>
-                                    </div>
-                                    <FormMessage/>
-                                  </FormItem>
-                                )}
-                              />
-                              <FormField
-                                control={form.control}
-                                name="link"
-                                render={({field}) => (
-                                  <FormItem>
-                                    <FormLabel>Link</FormLabel>
-                                    <FormControl>
-                                      <div className="relative">
-                                        <Input className="ps-9" {...field} />
-                                        <AtSign className="absolute top-1/2 -translate-y-1/2 left-3 w-4 h-4 text-muted-foreground" />
-                                      </div>
-                                    </FormControl>
-                                    <FormMessage/>
-                                  </FormItem>
-                                )}
-                              />
-                              <FormField
-                                control={form.control}
-                                name="description"
-                                render={({field}) => (
-                                  <FormItem className="md:col-span-2">
-                                    <FormLabel>Description</FormLabel>
-                                    <FormControl>
-                                      <Textarea rows={7} {...field} />
-                                    </FormControl>
-                                    <FormMessage/>
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
-                            <DrawerFooter>
-                              <div className="flex justify-end gap-2">
-                                <DrawerClose asChild>
-                                  <Button type="button" variant="outline">Cancel</Button>
-                                </DrawerClose>
-                                <Button type="submit">
-                                  {!loading || <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                  Save Changes
-                                </Button>
-                              </div>
-                            </DrawerFooter>
-                          </div>
-                        </form>
-                      </Form>
-                    </DrawerContent>
-                  </Drawer>
-                </div>
+                {brand.data.brand && brand.data.brand.description.length && (
+                  <CardContent className="pt-6">
+                    <div className="text-lg font-bold mb-4">Description</div>
+                    <CardDescription>{brand.data.brand.description}</CardDescription>
+                  </CardContent>
+                )}
+              </>
+            ) : (
+              <div className={`relative h-44 rounded-lg bg-center bg-cover bg-[url(/public/placeholder-light.png)] dark:bg-[url(/public/placeholder-dark.png)]`}>
+                <CardContent className="absolute bottom-0 w-full">
+                  <div className="flex items-center gap-x-4 md:gap-x-6">
+                    <Skeleton className="w-10 h-10 md:w-14 md:h-14 rounded-full"/>
+                    <div className="text-2xl md:text-3xl font-bold">
+                      <Skeleton className="w-32 md:w-56 max-w-full h-4"/>
+                    </div>
+                  </div>
+                </CardContent>
               </div>
-            </CardContent>
-          </div>
-          <CardContent className="pt-6">
-            <div className="text-lg font-bold mb-4">Description</div>
-            <CardDescription>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-              fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-              mollit anim id est laborum.
-            </CardDescription>
-          </CardContent>
+            )
+          }
         </Card>
         <Card>
           <CardHeader>
@@ -411,10 +336,11 @@ function Brand() {
               <Users className="h-4 w-4 text-muted-foreground"/>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+2350</div>
-              <p className="text-xs text-muted-foreground">
-                +180.1% from last month
-              </p>
+              <div className="text-3xl font-bold">
+                {
+                  users.data ? users.data.subscriptions.length : 0
+                }
+              </div>
             </CardContent>
           </Card>
           <Card>
@@ -436,12 +362,14 @@ function Brand() {
           </CardHeader>
           <CardContent>
             <div className="flex gap-x-2">
-              <Input value={`http://localhost:5173/@${brand.link}`} readOnly />
+              <Input value={
+                (brand && brand.data.brand) ? `http://localhost:5173/@${brand ? brand.data.brand.link : ""}` : "http://localhost:5173"
+              } readOnly />
               <TooltipProvider delayDuration={0}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="secondary" size="icon" onClick={() => copyLink(`http://localhost:5173/@${brand.link}`)}>
-                      <Copy className="w-4 h-4" />
+                    <Button variant="secondary" onClick={() => copyLink((brand && brand.data.brand) ? `http://localhost:5173/@${brand ? brand.data.brand.link : ""}` : "http://localhost:5173")}>
+                      <Copy className="w-4 h-4 mr-1.5" /> Copy Link
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -466,34 +394,63 @@ function Brand() {
           <ScrollArea className="h-[300px]">
             <CardContent>
               <div className="grid gap-8">
-                {searchSubscribers(subscribers, searchInput).map((user, key) => (
-                  <div key={key} className="flex items-center gap-4">
-                    <Avatar className="hidden h-9 w-9 sm:flex">
-                      <AvatarImage src="/avatars/01.png" alt={`${user.name} ${user.surname}`} />
-                      <AvatarFallback>{getInitials(`${user.name} ${user.surname}`)}</AvatarFallback>
-                    </Avatar>
-                    <div className="grid gap-1">
-                      <p className="text-sm font-medium leading-none">
-                        {user.name} {user.surname}
-                      </p>
-                      <p className="text-sm text-muted-foreground truncate">
-                        <a href={`mailto:${user.email}`} className="hover:underline">
-                          {user.email}
-                        </a>
-                      </p>
-                    </div>
-                    <div className="ml-auto">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="text-xs"
-                        onClick={() => unSubAlert(user, true)}
-                      >
-                        Unsubscribe
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                {
+                  (users.loading || users.error) ?
+                    (
+                      [...Array(3)].map((_, index) => (
+                        <div key={index} className="flex items-center space-x-4">
+                          <Skeleton className="h-10 w-10 rounded-full"/>
+                          <div className="space-y-2">
+                            <Skeleton className="h-4 w-[250px] max-w-full"/>
+                            <Skeleton className="h-3 w-[200px] max-w-full"/>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <>
+                        {
+                          searchSubscribers(users.data.subscriptions, searchInput).length ?
+                            searchSubscribers(users.data.subscriptions, searchInput)
+                              .map((user, key) => (
+                                <div key={key} className="flex items-center gap-4">
+                                  <Avatar className="hidden h-9 w-9 sm:flex">
+                                    <AvatarImage src={user.avatar} alt={`${user.name} ${user.surname}`}/>
+                                    <AvatarFallback>{getInitials(`${user.name} ${user.surname}`)}</AvatarFallback>
+                                  </Avatar>
+                                  <div className="grid gap-1">
+                                    <p className="text-sm font-medium leading-none">
+                                      {user.name} {user.surname}
+                                    </p>
+                                    <p className="text-sm text-muted-foreground truncate">
+                                      <a href={`mailto:${user.email}`} className="hover:underline">
+                                        {user.email}
+                                      </a>
+                                    </p>
+                                  </div>
+                                  <div className="ml-auto">
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="text-xs"
+                                      onClick={() => unSubAlert(user, true)}
+                                    >
+                                      Unsubscribe
+                                    </Button>
+                                  </div>
+                                </div>
+                              ))
+                            :
+                            (
+                              <div className="flex justify-center items-center">
+                                <div className="text-sm text-muted-foreground">
+                                  no subscribers
+                                </div>
+                              </div>
+                            )
+                        }
+                      </>
+                    )
+                }
               </div>
             </CardContent>
           </ScrollArea>
@@ -504,7 +461,8 @@ function Brand() {
           <AlertDialogHeader>
             <AlertDialogTitle>Unsubscribe</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to unsubscribe from <b className="text-primary">{unSubData?.name} {unSubData?.surname}</b>?
+              Are you sure you want to unsubscribe from <b
+              className="text-primary">{unSubData?.name} {unSubData?.surname}</b>?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

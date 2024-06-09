@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {Area, AreaChart, ResponsiveContainer, Tooltip} from "recharts";
+import {useQuery} from "@apollo/client";
 
 const currentMonth = new Date().toLocaleString('en', { month: 'long' }).toLowerCase()
 const sales = [
@@ -531,12 +532,26 @@ function AnalyticsProduct() {
         <div className="grid lg:grid-cols-2 xl:grid-cols-5 items-start gap-4 md:gap-8 mt-4">
           <div className="xl:col-span-3">
             <Card>
-              asd
+              <CardHeader>
+                <CardTitle>asd</CardTitle>
+                <CardDescription>asd.</CardDescription>
+              </CardHeader>
             </Card>
           </div>
           <div className="xl:col-span-2">
             <Card>
-              asd
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="md:mb-1">Earnings</CardTitle>
+                    <CardDescription>Earnings on the product.</CardDescription>
+                  </div>
+                  <div>
+                    <CardTitle className="font-extrabold md:text-3xl text-end">$241</CardTitle>
+                    <CardDescription className="text-xs text-end">+20.1% from last month</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
             </Card>
           </div>
         </div>

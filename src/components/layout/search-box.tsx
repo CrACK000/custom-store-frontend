@@ -17,6 +17,7 @@ import {useNavigate} from "react-router-dom";
 import {Input} from "@/components/ui/input";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {Separator} from "@/components/ui/separator";
+import {Search} from "lucide-react";
 
 function SearchBox() {
 
@@ -60,10 +61,13 @@ function SearchBox() {
         <kbd className="hidden items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">⌘ K</kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <Input
-          className="h-12 border-x-0 border-t-0 ring-0 rounded-none focus-visible:border-x-0 focus-visible:border-t-0 focus-visible:ring-0"
-          placeholder="Search for products, orders..."
-        />
+        <div className="relative">
+          <Input
+            className="h-12 ps-8 border-x-0 border-t-0 ring-0 rounded-none focus-visible:border-x-0 focus-visible:border-t-0 focus-visible:ring-0"
+            placeholder="Search for products, orders..."
+          />
+          <Search className="absolute top-1/2 -translate-y-1/2 left-2 w-4 h-4 text-muted-foreground" />
+        </div>
         <ScrollArea className="pe-1 max-h-96">
           <div className="flex flex-col gap-1 p-2.5">
             <p className="text-muted-foreground font-bold text-xs">Recent</p>

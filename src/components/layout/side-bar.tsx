@@ -1,7 +1,7 @@
 import React from "react"
 import {Home, LineChart, Package, Package2, Settings, ShoppingCart, Users2, Store} from "lucide-react"
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip"
-import {NavLink, useMatch} from "react-router-dom"
+import {Link, NavLink, useMatch} from "react-router-dom"
 
 function SideBar() {
   return (
@@ -15,9 +15,9 @@ function SideBar() {
           <span className="sr-only">Customs Inc</span>
         </a>
         <TooltipProvider>
-          <Tooltip delayDuration={250}>
+          <Tooltip>
             <TooltipTrigger asChild>
-              <NavLink
+              <Link
                 to="/"
                 className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8 ${
                     useMatch("/") ? "bg-accent text-accent-foreground" : "text-muted-foreground"
@@ -26,15 +26,15 @@ function SideBar() {
               >
                 <Home className="h-5 w-5"/>
                 <span className="sr-only">Dashboard</span>
-              </NavLink>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Dashboard</TooltipContent>
           </Tooltip>
         </TooltipProvider>
         <TooltipProvider>
-          <Tooltip delayDuration={250}>
+          <Tooltip>
             <TooltipTrigger asChild>
-              <NavLink
+              <Link
                 to="/orders"
                 className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8 ${
                     useMatch("/orders/*") ? "bg-accent text-accent-foreground" : "text-muted-foreground"
@@ -43,15 +43,15 @@ function SideBar() {
               >
                 <ShoppingCart className="h-5 w-5"/>
                 <span className="sr-only">Orders</span>
-              </NavLink>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Orders</TooltipContent>
           </Tooltip>
         </TooltipProvider>
         <TooltipProvider>
-          <Tooltip delayDuration={250}>
+          <Tooltip>
             <TooltipTrigger asChild>
-              <NavLink
+              <Link
                 to="/products"
                 className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8 ${
                     useMatch("/products/*") ? "bg-accent text-accent-foreground" : "text-muted-foreground"
@@ -60,15 +60,15 @@ function SideBar() {
               >
                 <Package className="h-5 w-5"/>
                 <span className="sr-only">Products</span>
-              </NavLink>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Products</TooltipContent>
           </Tooltip>
         </TooltipProvider>
         <TooltipProvider>
-          <Tooltip delayDuration={250}>
+          <Tooltip>
             <TooltipTrigger asChild>
-              <NavLink
+              <Link
                 to="/brand"
                 className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8 ${
                     useMatch("/brand") ? "bg-accent text-accent-foreground" : "text-muted-foreground"
@@ -77,15 +77,15 @@ function SideBar() {
               >
                 <Store className="h-5 w-5"/>
                 <span className="sr-only">My Brand</span>
-              </NavLink>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right">My Brand</TooltipContent>
           </Tooltip>
         </TooltipProvider>
         <TooltipProvider>
-          <Tooltip delayDuration={250}>
+          <Tooltip>
             <TooltipTrigger asChild>
-              <NavLink
+              <Link
                 to="/analytics"
                 className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8 ${
                     useMatch("/analytics/*") ? "bg-accent text-accent-foreground" : "text-muted-foreground"
@@ -94,7 +94,7 @@ function SideBar() {
               >
                 <LineChart className="h-5 w-5"/>
                 <span className="sr-only">Analytics</span>
-              </NavLink>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Analytics</TooltipContent>
           </Tooltip>
@@ -102,9 +102,9 @@ function SideBar() {
       </nav>
       <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
         <TooltipProvider>
-          <Tooltip delayDuration={250}>
+          <Tooltip>
             <TooltipTrigger asChild>
-              <NavLink
+              <Link
                 to="/settings"
                 className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8 ${
                     useMatch("/settings/*") ? "bg-accent text-accent-foreground" : "text-muted-foreground"
@@ -113,7 +113,7 @@ function SideBar() {
               >
                 <Settings className="h-5 w-5"/>
                 <span className="sr-only">Settings</span>
-              </NavLink>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Settings</TooltipContent>
           </Tooltip>

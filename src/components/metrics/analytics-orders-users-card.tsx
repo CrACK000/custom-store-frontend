@@ -12,9 +12,9 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Progress} from "@/components/ui/progress";
 import React, {useState} from "react";
 import {ChevronDown, Trophy} from "lucide-react";
-import {useUsers} from "@/hooks/use-users";
+import users from "@/data/users.json"
 
-const users = useUsers()
+
 
 const AnalyticsOrdersUsersCard = () => {
 
